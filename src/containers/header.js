@@ -3,7 +3,7 @@ import { Link, Route, Switch, withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { logoutRequest, requestSession } from '../actions/index';
-import NotFound from "./notfound";
+import NotFound from "../components/notfound";
 import Login from './login';
 import Home from '../components/home';
 import Signup from "./signup";

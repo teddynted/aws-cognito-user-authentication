@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { loginRequest, requestSession, logoutRequest } from '../actions/index';
 import "./login.css";
-import LoaderButton from "./loaderbutton";
+import LoaderButton from "../components/loaderbutton";
 
 class Login extends Component {
     constructor(props) {
