@@ -5,14 +5,19 @@ import { bindActionCreators } from 'redux';
 import { logoutRequest, requestSession } from '../actions/index';
 import NotFound from "../components/notfound";
 import Login from './login';
-import Home from '../components/home';
+import Home from './home';
 import Signup from "./signup";
 import "./header.css";
 
 class Header extends Component {
+    componentDidMount(){
+        this.props.requestSession();
+    }
     handleLogout = async event => {
         this.props.logoutRequest();
-        this.props.history.push('/login');
+        /*setTimeout(() => { 
+           this.props.requestSession();
+        }, 500);*/
     }
     render(){
         return(
@@ -31,7 +36,7 @@ class Header extends Component {
                          </ul> :
                          <ul className="main-nav">
                              <li><Link className="link active color"    to="/login">Login</Link></li>
-                             <li><Link className="link color" to="/signup">Sign    Up</Link></li>
+                             <li><Link className="link color" to="/signup">Sign Up</Link></li>
                              <div className="clearfix"></div>
                          </ul>}
                        </div>

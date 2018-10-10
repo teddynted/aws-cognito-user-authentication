@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { loginRequest, requestSession, logoutRequest } from '../actions/index';
+import { loginRequest, requestSession, logoutRequest, requestCurrentUser } from '../actions/index';
 import "./login.css";
 import LoaderButton from "../components/loaderbutton";
 
@@ -14,9 +14,6 @@ class Login extends Component {
           email: "",
           password: ""
         };
-    }
-    componentWillMount(){
-        this.props.logoutRequest();
     }
     validateForm() {
        return this.state.email.length > 0 && this.state.password.length > 0;
@@ -33,6 +30,7 @@ class Login extends Component {
     }
     componentDidUpdate(){
         this.props.requestSession();
+        this.props.requestCurrentUser();
     }
     render(){
         if( this.props.session ) {
@@ -56,7 +54,7 @@ class Login extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators( { loginRequest, requestSession, logoutRequest }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators( { loginRequest, requestSession, logoutRequest, requestCurrentUser }, dispatch);
 const mapStateToProps = ({ session }) => ({ session });
 
 export default connect( mapStateToProps, mapDispatchToProps)(Login)

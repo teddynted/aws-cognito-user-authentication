@@ -37,7 +37,6 @@ const signup = async data => {
 /*
  Confirm User Sign up
  */
-
 const confirmSignup = async data => {
     try {
         await Auth.confirmSignUp(data.email, data.password);
@@ -48,4 +47,12 @@ const confirmSignup = async data => {
     }
 };
 
-export default { login, logout, session, signup, confirmSignup };
+/**
+ * Get current authenticated user details
+ */
+const currentUserInfo = async () => { 
+    var user = await Auth.currentAuthenticatedUser();
+    return user.attributes.email;
+}
+
+export default { login, logout, session, signup, confirmSignup, currentUserInfo };
