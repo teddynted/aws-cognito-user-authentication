@@ -7,6 +7,7 @@ import NotFound from "../components/notfound";
 import Login from './login';
 import Home from '../components/home';
 import Signup from "./signup";
+import "./header.css";
 
 class Header extends Component {
     handleLogout = async event => {
@@ -14,42 +15,40 @@ class Header extends Component {
         this.props.history.push('/login');
     }
     render(){
+        console.log(this.props.session);
         return(
-           <div>
-                <div className="col-lg-12">
-                   <nav className="navbar navbar-light bg-light">
-                      <div className="navbar-header">
-                        <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span className="sr-only">Toggle navigation</span>
-                            <span className="icon-bar"></span>
-                            <span className="icon-bar"></span>
-                            <span className="icon-bar"></span>
-                        </button>
-                        <Link className="navbar-brand bold color" to="/">Kitabu</Link>
-                      </div>
-                      <div id="navbar" className="navbar-collapse collapse">
-                        {
-                            this.props.session ?
-                            <ul className="nav navbar-nav navbar-right main-nav">
-                                <li><a href="/" className="link active color logout" onClick={this.handleLogout}>Logout</a></li>
-                            </ul> :
-                            <ul className="nav navbar-nav navbar-right main-nav">
-                                <li><Link className="link active color" to="/login">Login</Link></li>
-                                <li><Link className="link color" to="/signup">Sign Up</Link></li>
-                            </ul>
-                        }
-                      </div>
-                    </nav>
+           <div className="col-lg-12">
+                <div className="row">
+                   <div className="col-lg-12 bg-light border-bottom">
+                    <div className="row">
+                       <div className="col-md-6">
+                         <Link className="identity" to="/">AWS Authentication</Link>
+                       </div>
+                       <div className="col-md-6 text-right">
+                        { this.props.session === true ?
+                         <ul className="main-nav">
+                             <li><a href="/" className="link active color logout" onClick=   {this.handleLogout}>Logout</a></li>
+                             <div className="clearfix"></div>
+                         </ul> :
+                         <ul className="main-nav">
+                             <li><Link className="link active color"    to="/login">Login</Link></li>
+                             <li><Link className="link color" to="/signup">Sign    Up</Link></li>
+                             <div className="clearfix"></div>
+                         </ul>}
+                       </div>
+                    </div>
+                   </div>
+                   <div className="col-lg-12">
+                        <Switch>
+                          <Route exact path="/" component={Home} />
+                          <Route path="/login" component={Login} />
+                          <Route path="/signup" component={Signup} />
+                          { /* Catch all unmatched routes */ }
+                          <Route component={NotFound} />
+                        </Switch>
+                   </div>
                 </div>
-                <div className="col-lg-12">
-                  <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/signup" component={Signup} />
-                    { /* Catch all unmatched routes */ }
-                    <Route component={NotFound} />
-                  </Switch>
-                </div>
+                
            </div>
         );
     }

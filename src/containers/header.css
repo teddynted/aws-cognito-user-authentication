@@ -1,0 +1,42 @@
+.identity {
+    display: inline-block;
+    padding: 10px;
+    color: #444;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.identity:hover {
+   text-decoration: none;
+   color: #333;
+}
+
+ul.main-nav {
+    margin: 0;
+    padding: 0;
+    display: inline-table;
+    position: relative;
+    top: 4px;
+}
+
+ul.main-nav li {
+    margin: 0;
+    padding: 0;
+    display: inline;
+    float: left;
+}
+
+ul.main-nav li a {
+    display: inline-block;
+    color: #444;
+    padding: 10px;
+}
+
+ul.main-nav li a:hover {
+    text-decoration: none;
+    background-color: #eee;
+}
+
+.border {
+    border: solid 1px #900;
+}

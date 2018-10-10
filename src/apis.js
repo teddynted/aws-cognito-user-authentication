@@ -3,7 +3,7 @@ import { Auth } from "aws-amplify";
 // User Login
 const login = async data => {
     try {
-        await Auth.signIn(data.username, data.password);
+        await Auth.signIn(data.email, data.password);
         return true;
     } catch (e) {
         return false;
@@ -24,4 +24,28 @@ const session = async () => {
     }
 }
 
-export default { login, logout, session };
+// User Sign up
+const signup = async data => {
+    try {
+        await Auth.signUp(data.email, data.password);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
+/*
+ Confirm User Sign up
+ */
+
+const confirmSignup = async data => {
+    try {
+        await Auth.confirmSignUp(data.email, data.password);
+        await Auth.signIn(data.email, data.password);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
+export default { login, logout, session, signup, confirmSignup };

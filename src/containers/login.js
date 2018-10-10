@@ -29,7 +29,7 @@ class Login extends Component {
     handleSubmit = e => {
         e.preventDefault();
         this.setState({ isLoading: true });
-        this.props.loginRequest({ "username": this.state.email, "password": this.state.password });
+        this.props.loginRequest({ "email": this.state.email, "password": this.state.password });
     }
     componentDidUpdate(){
         this.props.requestSession();
