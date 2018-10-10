@@ -47,7 +47,6 @@ class SignUp extends Component {
         event.preventDefault();
         this.setState({ isLoading: true });
         try {
-            //await Auth.confirmSignUp(this.state.email, this.state.confirmationCode);
             this.props.loginRequest(this.state.email, this.state.password);
             this.props.history.push("/");
         } catch (e) {
@@ -70,7 +69,7 @@ class SignUp extends Component {
               type="submit"
               isLoading={this.state.isLoading}
               text="Verify"
-              loadingText="Verifying…"
+              loadingText="Verifying..."
             />
           </form>
         );
@@ -79,7 +78,6 @@ class SignUp extends Component {
     render(){
         return(
             <div className="col-md-12 Signup">
-               <h2>Sign Up</h2>
                <form onSubmit={this.handleSubmit}>
                  <div className="form-group">
                    <label htmlFor="Email">Email address</label>

@@ -9,15 +9,16 @@ class Home extends Component {
   render(){
     if(!this.props.session){
        return <Redirect to="/login" />
+    } else {
+       return(
+         <div className="col-md-12">
+           <div className="home">
+             <h2>Welcome Back!</h2>
+             <p>User details goes here!</p>
+           </div>
+         </div>  
+       );
     }
-    return(
-      <div className="col-md-12">
-        <div className="home">
-          <h2>Welcome Back!</h2>
-          <p>A simple contacts manager app</p>
-        </div>
-      </div>  
-    );
   }
 }
 

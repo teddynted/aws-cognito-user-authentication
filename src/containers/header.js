@@ -15,7 +15,6 @@ class Header extends Component {
         this.props.history.push('/login');
     }
     render(){
-        console.log(this.props.session);
         return(
            <div className="col-lg-12">
                 <div className="row">
@@ -25,7 +24,7 @@ class Header extends Component {
                          <Link className="identity" to="/">AWS Authentication</Link>
                        </div>
                        <div className="col-md-6 text-right">
-                        { this.props.session === true ?
+                        { this.props.session ?
                          <ul className="main-nav">
                              <li><a href="/" className="link active color logout" onClick=   {this.handleLogout}>Logout</a></li>
                              <div className="clearfix"></div>
