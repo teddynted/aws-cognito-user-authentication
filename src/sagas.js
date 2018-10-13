@@ -1,65 +1,42 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { LOGIN_REQUEST, LOGIN_RECEIVE, LOGOUT_REQUEST, REQUEST_SESSION, RECEIVE_SESSION, SIGNUP_REQUEST, SIGNUP_RECEIVE, CONFIRM_SIGNUP_REQUEST, REQUEST_CURRENT_USER, RECEIVE_CURRENT_USER } from './actions/index';
-import { push } from "react-router-redux";
+import { LOGIN_REQUEST, LOGIN_RECEIVE, LOGOUT_REQUEST, REQUEST_SESSION, RECEIVE_SESSION, SIGNUP_REQUEST, SIGNUP_RECEIVE, CONFIRM_SIGNUP_REQUEST, REQUEST_CURRENT_USER, RECEIVE_CURRENT_USER, CONFIRM_SIGNUP_RECEIVE } from './actions/index';
 import api from "./apis";
 
 function* loginRequest(action) {
-  try {
     const { data } = action;
-    yield call(api.login,data);
-    yield put({ type: RECEIVE_SESSION, data: true });
-  } catch (err) {
-    yield put({ type: LOGIN_RECEIVE, data: 'Error occured trying to login!' });
-  }
+    const login = yield call(api.login,data);
+    const session = yield call(api.session);
+    yield put({ type: LOGIN_RECEIVE, data: login });
+    yield put({ type: RECEIVE_SESSION, data: session });
 }
 
 function* logoutRequest() {
-  try {
     yield call(api.logout);
-  } catch (err) {
-    yield put({ type: LOGIN_RECEIVE, data: 'Error occured trying to logout!' });
-  }
+    yield put({ type: LOGIN_RECEIVE, data: 'Logged out successfully!' });
+    yield put({ type: RECEIVE_SESSION, data: false });
 }
 
 function* sessionRequest() {
-  try {
-    const response = yield call(api.session);
-    yield put({ type: RECEIVE_SESSION, data: response });
-  } catch (err) {
-    yield put({ type: RECEIVE_SESSION, data: false });
-  }
+  const response = yield call(api.session);
+  yield put({ type: RECEIVE_SESSION, data: response });
+  
 }
 
 function* signupRequest(action) {
-  try {
     const { data } = action;
-    yield call(api.signup,data);
-    yield put({ type: SIGNUP_RECEIVE, data: 'Signed up successfully!' });
-    yield put({ type: RECEIVE_SESSION, data: true });
-  } catch (err) {
-    yield put({ type: SIGNUP_RECEIVE, data: 'Error occured trying to sign up!' });
-  }
+    const res = yield call(api.signup,data);
+    yield put({ type: SIGNUP_RECEIVE, data: res });
 }
 
 function* confirmSignup(action) {
-  try {
     const { data } = action;
-    yield call(api.confirmSignup,data);
-    const response = yield call(api.session);
-    yield put({ type: RECEIVE_SESSION, data: response });
-    yield put(push("/"));
-  } catch (err) {
-    yield put({ type: SIGNUP_RECEIVE, data: 'Error occured trying to sign up!' });
-  }
+    const response = yield call(api.confirmSignup,data);
+    yield put({ type: CONFIRM_SIGNUP_RECEIVE, data: response });
 }
 
 function* currentUserInfo(){
-  try {
     const response = yield call(api.currentUserInfo);
     yield put({ type: RECEIVE_CURRENT_USER, data: response });
-  } catch (err) {
-    yield put({ type: SIGNUP_RECEIVE, data: 'Error occured trying to get user info!' });
-  }
 }
 
 export default function* mySaga(){

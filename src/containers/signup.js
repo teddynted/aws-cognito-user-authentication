@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { loginRequest, signupRequest, requestSession, logoutRequest } from '../actions/index';
+import { signupRequest, requestSession, confirmSignupRequest, loginRequest } from '../actions/index';
 import LoaderButton from "../components/loaderbutton";
 import "./signup.css";
 
@@ -14,11 +14,9 @@ class SignUp extends Component {
             password: "",
             confirmPassword: "",
             confirmationCode: "",
-            newUser: null
+            newUser: null,
+            flash: ""
         };   
-    }
-    componentWillMount(){
-        this.props.logoutRequest();
     }
     validateForm() {
         return this.state.email.length > 0 && this.state.password.length > 0 && this.state.password === this.state.confirmPassword;
@@ -35,47 +33,53 @@ class SignUp extends Component {
         e.preventDefault();
         this.setState({ isLoading: true });
         try {
-            const newUser = { username: this.state.email, password: this.state.password };
+            const newUser = { email: this.state.email, password: this.state.password };
             this.props.signupRequest(newUser);
-            this.setState({ newUser });
         } catch (e) {
           console.log(e.message);
         }
-        this.setState({ isLoading: false });
     }
     handleConfirmationSubmit = async event => {
         event.preventDefault();
         this.setState({ isLoading: true });
         try {
-            this.props.loginRequest(this.state.email, this.state.password);
-            this.props.history.push("/");
+           this.props.confirmSignupRequest( { "email": this.state.email, "confirmationCode": this.state.confirmationCode, "password": this.state.password });
         } catch (e) {
             console.log(e.message);
             this.setState({ isLoading: false });
         }
     }
     renderConfirmationForm() {
+        let alert = { margin: '10px 0' }
         return (
           <form onSubmit={this.handleConfirmationSubmit}>
             <div className="form-group">
                 <label htmlFor="confirmation-code">Confirmation Code</label>
-                <input type="tel" value={this.state.confirmationCode} onChange={this.handleChange} className="form-control" id="tel" />
-                <p class="help-block">Please check your email for the code.</p>
-              </div>
-            <LoaderButton
-              block
-              bsSize="large"
-              disabled={!this.validateConfirmationForm()}
-              type="submit"
-              isLoading={this.state.isLoading}
-              text="Verify"
-              loadingText="Verifying..."
+                <input type="text" value={this.state.confirmationCode} onChange={this.handleChange} className="form-control" id="confirmationCode" />
+                <p className="help-block">Please check your email for the code.</p>
+            </div>
+            <LoaderButton disabled={!this.validateConfirmationForm()} type="submit" isLoading={this.state.isLoading} text="Verify" loadingText="Verifying..."
             />
+            { this.state.flash !== '' ? 
+                    <div style={alert} className="alert alert-danger">
+                        {this.state.flash}
+                    </div> : null }
           </form>
         );
     }
-    
-    render(){
+    componentDidUpdate(prevProps, prevState) {
+        if( prevProps.flash !== this.props.flash ){
+            this.setState({ isLoading: false, flash: this.props.flash });
+            if( this.props.flash === 'signup success' ) {
+               this.setState({ newUser: { email: this.state.email, password: this.state.password }, flash: '' });
+            }
+            if( this.props.flash === 'confirm success' ) {
+                this.props.history.push("/");
+            }
+        }
+    }
+    renderForm(){
+        let alert = { margin: '10px 0' }
         return(
             <div className="col-md-12 Signup">
                <form onSubmit={this.handleSubmit}>
@@ -87,14 +91,29 @@ class SignUp extends Component {
                    <label htmlFor="Password">Password</label>
                    <input type="text" onChange={this.handleChange} className="form-control" value={this.state.password} id="password" />
                  </div>
-                 <LoaderButton disabled={!this.validateForm()} type="submit" isLoading={this.state.isLoading} text="Sign Up" loadingText="Signing up..." />
+                 <div className="form-group">
+                   <label htmlFor="confirmPassword">Confirm Password</label>
+                   <input type="text" onChange={this.handleChange} className="form-control" value={this.state.confirmPassword} id="confirmPassword" />
+                 </div>
+                 <LoaderButton disabled={!this.validateForm()} type="submit" isLoading={this.state.isLoading} text="Signup" loadingText="Signing up..." />
+                 { this.state.flash !== '' ? 
+                    <div style={alert} className="alert alert-danger">
+                        {this.state.flash}
+                    </div> : null }
                </form>
             </div>
-        )
+        );
+    }
+    render(){
+       return(
+            <div className="col-md-12 Signup">
+                { this.state.newUser === null ? this.renderForm() : this.renderConfirmationForm() }
+            </div>
+       );
     }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators( { loginRequest, signupRequest, requestSession, logoutRequest }, dispatch);
-const mapStateToProps = ({ session }) => ({ session });
+const mapDispatchToProps = dispatch => bindActionCreators( { signupRequest, requestSession, confirmSignupRequest, loginRequest }, dispatch);
+const mapStateToProps = ({ session, flash }) => ({ session, flash });
 
 export default connect( mapStateToProps, mapDispatchToProps)(SignUp)

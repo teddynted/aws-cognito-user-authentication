@@ -15,9 +15,6 @@ class Header extends Component {
     }
     handleLogout = async event => {
         this.props.logoutRequest();
-        /*setTimeout(() => { 
-           this.props.requestSession();
-        }, 500);*/
     }
     render(){
         return(

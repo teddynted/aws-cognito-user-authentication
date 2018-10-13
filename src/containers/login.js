@@ -12,7 +12,8 @@ class Login extends Component {
         this.state = {
           isLoading: false,
           email: "",
-          password: ""
+          password: "",
+          flash: ""
         };
     }
     validateForm() {
@@ -28,33 +29,42 @@ class Login extends Component {
         this.setState({ isLoading: true });
         this.props.loginRequest({ "email": this.state.email, "password": this.state.password });
     }
-    componentDidUpdate(){
+    componentDidUpdate(prevProps, prevState){
         this.props.requestSession();
         this.props.requestCurrentUser();
+        if( prevProps.flash !== this.props.flash ){
+            this.setState({ flash: this.props.flash, isLoading: false });
+        }
     }
     render(){
+        let alert = { margin: '10px 0' }
         if( this.props.session ) {
             return <Redirect to='/' /> 
-        } 
-        return (
-            <div className="col-md-12 Login">
-              <form onSubmit={this.handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="Email">Email address</label>
-                <input type="text" value={this.state.email} onChange={this.handleChange} className="form-control" id="email" />
-              </div>
-              <div className="form-group">
-                <label htmlFor="Password">Password</label>
-                <input type="text" onChange={this.handleChange} className="form-control" value={this.state.password} id="password" />
-              </div>
-              <LoaderButton disabled={!this.validateForm()} type="submit" isLoading={this.state.isLoading} text="Login" loadingText="Logging in..." />
-              </form>
-            </div>
-        );
+        } else {
+            return (
+                <div className="col-md-12 Login">
+                  <form onSubmit={this.handleSubmit}>
+                  <div className="form-group">
+                    <label htmlFor="Email">Email address</label>
+                    <input type="text" value={this.state.email} onChange={this.handleChange}     className="form-control" id="email" />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="Password">Password</label>
+                    <input type="text" onChange={this.handleChange} className="form-control" value=    {this.state.password} id="password" />
+                  </div>
+                  <LoaderButton disabled={!this.validateForm()} type="submit" isLoading={this.state.isLoading} text="Login" loadingText="Logging in..." />
+                  { this.state.flash !== '' ? 
+                    <div style={alert} className="alert alert-danger">
+                        {this.state.flash}
+                    </div> : null }
+                  </form>
+                </div>
+            );
+        }
     }
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators( { loginRequest, requestSession, logoutRequest, requestCurrentUser }, dispatch);
-const mapStateToProps = ({ session }) => ({ session });
+const mapStateToProps = ({ session, flash }) => ({ session, flash });
 
 export default connect( mapStateToProps, mapDispatchToProps)(Login)

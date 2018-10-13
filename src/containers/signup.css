@@ -1,7 +1,13 @@
 input[type=text] {
   padding: 20px 12px;
 }
-    
+
+.Signup form p.help-block {
+  font-size: 14px;
+  padding-bottom: 10px;
+  color: #999;
+}
+
 @media all and (min-width: 480px) {
     .Signup {
       padding: 60px 0;

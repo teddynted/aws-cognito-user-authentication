@@ -4,9 +4,9 @@ import { Auth } from "aws-amplify";
 const login = async data => {
     try {
         await Auth.signIn(data.email, data.password);
-        return true;
+        return 'login success';
     } catch (e) {
-        return false;
+        return e.message;
     }
 };
 
@@ -27,10 +27,10 @@ const session = async () => {
 // User Sign up
 const signup = async data => {
     try {
-        await Auth.signUp(data.email, data.password);
-        return true;
+        await Auth.signUp({ username:data.email, password: data.password });
+        return 'signup success';
     } catch (e) {
-        return false;
+        return e.message;
     }
 };
 
@@ -39,11 +39,11 @@ const signup = async data => {
  */
 const confirmSignup = async data => {
     try {
-        await Auth.confirmSignUp(data.email, data.password);
-        await Auth.signIn(data.email, data.password);
-        return true;
+        await Auth.confirmSignUp( data.email, data.confirmationCode );
+        await Auth.signIn( data.email, data.password );
+        return 'confirm success';
     } catch (e) {
-        return false;
+        return !e.message ? 'The code you provided is incorrect!' : e.message;
     }
 };
 
@@ -51,8 +51,13 @@ const confirmSignup = async data => {
  * Get current authenticated user details
  */
 const currentUserInfo = async () => { 
-    var user = await Auth.currentAuthenticatedUser();
-    return user.attributes.email;
+    try {
+      var user = await Auth.currentAuthenticatedUser();
+      return user.attributes.email;
+    } catch(e){
+      return e;
+    }
+    
 }
 
 export default { login, logout, session, signup, confirmSignup, currentUserInfo };
