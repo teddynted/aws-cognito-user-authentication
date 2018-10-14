@@ -40,7 +40,6 @@ function* currentUserInfo(){
 export default function* mySaga(){
     yield takeLatest(LOGIN_REQUEST, loginRequest);
     yield takeLatest(LOGOUT_REQUEST, logoutRequest);
-    yield takeLatest(LOGOUT_REQUEST, logoutRequest);
     yield takeLatest(REQUEST_SESSION, sessionRequest);
     yield takeLatest(SIGNUP_REQUEST, signupRequest);
     yield takeLatest(CONFIRM_SIGNUP_REQUEST, confirmSignup);
