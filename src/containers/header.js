@@ -3,6 +3,7 @@ import { Link, Route, Switch, withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { logoutRequest, requestSession } from '../actions/index';
+import PrivateRoute from "../components/privateroute";
 import NotFound from "../components/notfound";
 import Login from './login';
 import Home from './home';
@@ -14,9 +15,11 @@ class Header extends Component {
        super(props);
        this.state = { session: false };
     }
+    componentWillMount(){
+        this.props.requestSession();
+    }
     handleLogout = async event => {
         this.props.logoutRequest();
-        this.props.requestSession();
     }
     componentDidUpdate(prevProps, prevState) {
         if( prevProps.session !== this.props.session ){
@@ -48,7 +51,7 @@ class Header extends Component {
                    </div>
                    <div className="col-lg-12">
                         <Switch>
-                          <Route exact path="/" component={Home} />
+                          <PrivateRoute exact path="/" loggedIn={this.state.session} component={Home} />
                           <Route path="/login" component={Login} />
                           <Route path="/signup" component={Signup} />
                           { /* Catch all unmatched routes */ }

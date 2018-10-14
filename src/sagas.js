@@ -12,7 +12,6 @@ function* loginRequest(action) {
 
 function* logoutRequest() {
     yield call(api.logout);
-    yield put({ type: RECEIVE_SESSION, data: false });
 }
 
 function* sessionRequest() {
