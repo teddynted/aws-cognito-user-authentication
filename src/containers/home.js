@@ -15,6 +15,7 @@ class Home extends Component {
         <div className="home">
           <h2>Welcome Back!</h2>
           <p style={style}>{this.props.user}</p>
+          <p>This app deploys Amazon Cognito to control access to backend resources.</p>
         </div>
       </div>
     );
