@@ -12,7 +12,6 @@ function* loginRequest(action) {
 
 function* logoutRequest() {
     yield call(api.logout);
-    yield put({ type: LOGIN_RECEIVE, data: 'Logged out successfully!' });
     yield put({ type: RECEIVE_SESSION, data: false });
 }
 

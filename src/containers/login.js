@@ -13,7 +13,8 @@ class Login extends Component {
           isLoading: false,
           email: "",
           password: "",
-          flash: ""
+          flash: "",
+          session: false
         };
     }
     validateForm() {
@@ -28,17 +29,19 @@ class Login extends Component {
         e.preventDefault();
         this.setState({ isLoading: true });
         this.props.loginRequest({ "email": this.state.email, "password": this.state.password });
-    }
-    componentDidUpdate(prevProps, prevState){
         this.props.requestSession();
-        this.props.requestCurrentUser();
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if( prevProps.session !== this.props.session ){
+            this.setState({ session: this.props.session });
+        }
         if( prevProps.flash !== this.props.flash ){
             this.setState({ flash: this.props.flash, isLoading: false });
         }
     }
     render(){
         let alert = { margin: '10px 0' }
-        if( this.props.session ) {
+        if( this.state.session ) {
             return <Redirect to='/' /> 
         } else {
             return (

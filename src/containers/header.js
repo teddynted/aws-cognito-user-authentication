@@ -10,11 +10,18 @@ import Signup from "./signup";
 import "./header.css";
 
 class Header extends Component {
-    componentDidMount(){
-        this.props.requestSession();
+    constructor(props){
+       super(props);
+       this.state = { session: false };
     }
     handleLogout = async event => {
         this.props.logoutRequest();
+        this.props.requestSession();
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if( prevProps.session !== this.props.session ){
+            this.setState({ session: this.props.session });
+        }
     }
     render(){
         return(
@@ -26,13 +33,13 @@ class Header extends Component {
                          <Link className="identity" to="/">AWS Authentication</Link>
                        </div>
                        <div className="col-md-6 text-right">
-                        { this.props.session ?
+                        { this.state.session ?
                          <ul className="main-nav">
-                             <li><a href="/" className="link active color logout" onClick=   {this.handleLogout}>Logout</a></li>
+                             <li><a href="/" className="link active color logout" onClick={this.handleLogout}>Logout</a></li>
                              <div className="clearfix"></div>
                          </ul> :
                          <ul className="main-nav">
-                             <li><Link className="link active color"    to="/login">Login</Link></li>
+                             <li><Link className="link active color" to="/login">Login</Link></li>
                              <li><Link className="link color" to="/signup">Sign Up</Link></li>
                              <div className="clearfix"></div>
                          </ul>}

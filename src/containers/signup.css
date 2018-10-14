@@ -10,7 +10,7 @@ input[type=text] {
 
 @media all and (min-width: 480px) {
     .Signup {
-      padding: 60px 0;
+      padding: 30px 0;
     }
     .Signup form {
       margin: 0 auto;

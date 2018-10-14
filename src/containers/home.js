@@ -7,22 +7,22 @@ import './home.css';
 
 class Home extends Component {
   componentDidMount(){
-    this.props.requestCurrentUser();
     this.props.requestSession();
+    this.props.requestCurrentUser();
   }
   render(){
     let style = { color: '#d24d57' };
     if(!this.props.session){
-       return <Redirect to="/login" />
+        return <Redirect to="/login" />
     } else {
-       return(
-         <div className="col-md-12">
-           <div className="home">
-             <h2>Welcome Back!</h2>
-             <p style={style}>{this.props.user}</p>
-           </div>
-         </div>  
-       );
+      return(
+        <div className="col-md-12">
+          <div className="home">
+            <h2>Welcome Back!</h2>
+            <p style={style}>{this.props.user}</p>
+          </div>
+        </div>
+      );
     }
   }
 }
