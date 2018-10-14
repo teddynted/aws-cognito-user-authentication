@@ -22,8 +22,8 @@ function* sessionRequest() {
 
 function* signupRequest(action) {
     const { data } = action;
-    const res = yield call(api.signup,data);
-    yield put({ type: SIGNUP_RECEIVE, data: res });
+    const response = yield call(api.signup,data);
+    yield put({ type: SIGNUP_RECEIVE, data: response });
 }
 
 function* confirmSignup(action) {
